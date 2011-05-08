@@ -21,6 +21,9 @@ namespace StoryTeller.UserInterface.Editing
     {
         private const string JQUERY = "jquery-1.3.2.js";
         private const string STORYTELLER = "StoryTeller.js";
+        private const string EXTERNAL = "External";
+        private const string CORE = "Core";
+        private const string CONTROLS = "Controls";
 
         private FixtureLibrary _library;
 
@@ -77,25 +80,27 @@ namespace StoryTeller.UserInterface.Editing
 
         private void addJavascriptFiles(HtmlDocument document)
         {
-            var scripts = new string[] {JQUERY, STORYTELLER};
+            var scripts = new[] {JQUERY, STORYTELLER};
 
             Embeds.WriteFiles();
             var files = Embeds.GetFiles();
+            AddFilesInProperOrder(scripts, files, document);
+        }
 
-            scripts.Each(s =>
+        private static void AddFilesInProperOrder(IEnumerable<string> fileThatMustComeFirst, 
+            IEnumerable<JavascriptFile> files, HtmlDocument document)
+        {
+            fileThatMustComeFirst.Each(s =>
             {
                 var file = files.First(x => x.FileName == s);
                 document.AddJavaScript(file.Contents());
-                //document.ReferenceJavaScriptFile(file.FullPath);
             });
-
-
-
-            files.Where(x => !scripts.Contains(x.FileName)).Each(file =>
-            {
-                document.AddJavaScript(file.Contents());
-                //document.ReferenceJavaScriptFile(file.FullPath);
-            });
+            files.Where(x => x.Folder == EXTERNAL && !fileThatMustComeFirst.Contains(x.FileName))
+                .Each(file => document.AddJavaScript(file.Contents()));
+            files.Where(x => x.Folder == CORE && !fileThatMustComeFirst.Contains(x.FileName))
+                .Each(file => document.AddJavaScript(file.Contents()));
+            files.Where(x => x.Folder == CONTROLS && !fileThatMustComeFirst.Contains(x.FileName))
+                .Each(file => document.AddJavaScript(file.Contents()));
         }
 
         private void addTemplates(HtmlDocument document, FixtureLibrary library)
