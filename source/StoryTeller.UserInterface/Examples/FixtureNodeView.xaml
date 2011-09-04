@@ -3,9 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="199" d:DesignWidth="230">
     <DockPanel>
         <DockPanel DockPanel.Dock="Top" >
-            <Label Name="description" Background="AntiqueWhite" 
-                   DockPanel.Dock="Left"
-               Margin="10 10 20 10">The Description</Label>
+            <Label Name="description" Background="AntiqueWhite" DockPanel.Dock="Left"
+                   FontWeight="Bold"
+                   FontSize="12"
+                   Margin="10 10 20 10">The Description</Label>
             <Button Name="refresh" ClickMode="Release" DockPanel.Dock="Right"  
                     Width="65"
                     Content="Refresh" Margin="3 3 3 3" />
