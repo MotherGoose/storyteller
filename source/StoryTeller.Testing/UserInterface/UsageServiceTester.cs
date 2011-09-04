@@ -2,8 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using StoryTeller.Domain;
-using StoryTeller.Execution;
-using StoryTeller.Usages;
 using StoryTeller.UserInterface;
 
 namespace StoryTeller.Testing.UserInterface
@@ -16,8 +14,6 @@ namespace StoryTeller.Testing.UserInterface
         [TestFixtureSetUp]
         public void SetUp()
         {
-            runner = new ProjectTestRunner(DataMother.THE_GRAMMAR_FILE);
-
             _context = new ProjectContext();
             _context.Hierarchy = DataMother.GrammarProject().LoadTests();
             _context.Library = DataMother.GrammarsProjectRunner().GetLibary();
@@ -26,8 +22,6 @@ namespace StoryTeller.Testing.UserInterface
 
         #endregion
 
-        private ProjectTestRunner runner;
-        private UsageGraph usages;
         private UsageService _service;
         private ProjectContext _context;
 
