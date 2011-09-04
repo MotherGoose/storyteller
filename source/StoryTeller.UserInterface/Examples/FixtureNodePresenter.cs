@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using StoryTeller.Domain;
 using StoryTeller.Execution;
 using StoryTeller.Model;
+using StoryTeller.Usages;
 using StoryTeller.UserInterface.Actions;
 using StoryTeller.UserInterface.Screens;
 
@@ -9,32 +12,30 @@ namespace StoryTeller.UserInterface.Examples
     {
         private readonly IFixtureNode _subject;
         private readonly IFixtureNodeView _view;
+        private UsageService _usageService;
 
-        public FixtureNodePresenter(IFixtureNodeView view, IFixtureNode subject)
+        public FixtureNodePresenter(IFixtureNodeView view, IFixtureNode subject, UsageService usageService)
         {
             _view = view;
             _subject = subject;
+            _usageService = usageService;
         }
-
-
-        #region IListener<BinaryRecycleFinished> Members
-
+        
         public void Handle(BinaryRecycleFinished message)
         {
         }
 
-        #endregion
-
-        #region IScreen<IFixtureNode> Members
 
         public IFixtureNode Subject { get { return _subject; } }
 
         public object View { get { return _view; } }
 
-        public string Title { get { return "Something"; } }
+        public string Title { get { return _subject.Name; } }
 
         public void Activate(IScreenObjectRegistry screenObjects)
         {
+            _view.ShowUsage(_subject);
+            _view.ShowTests(_usageService.FindUsages(_subject as ITraceableUse));
         }
 
         public bool CanClose()
@@ -45,9 +46,6 @@ namespace StoryTeller.UserInterface.Examples
         public void Dispose()
         {
         }
-
-        #endregion
-
-
+        
     }
 }

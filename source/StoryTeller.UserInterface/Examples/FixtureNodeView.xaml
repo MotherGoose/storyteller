@@ -1,13 +1,14 @@
 ﻿<UserControl x:Class="StoryTeller.UserInterface.Examples.FixtureNodeView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="199" d:DesignWidth="230">
     <DockPanel>
-        <Label Name="description" Background="AntiqueWhite" DockPanel.Dock="Top">The Description</Label>
-
-        
-        <TextBox Name="xml" Background="NavajoWhite" TextAlignment="Left" TextWrapping="Wrap" IsReadOnly="True" DockPanel.Dock="Left"></TextBox>
-        <WebBrowser Name="browser" DockPanel.Dock="Right">     
+        <Label Name="description" Background="AntiqueWhite" 
+               DockPanel.Dock="Top"
+               Margin="10 10 10 10">The Description</Label>
+        <ScrollViewer>
+            <StackPanel Name="Tests"  Orientation="Vertical" Margin="25 0 0 0">
             
-        </WebBrowser>
+            </StackPanel>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>
