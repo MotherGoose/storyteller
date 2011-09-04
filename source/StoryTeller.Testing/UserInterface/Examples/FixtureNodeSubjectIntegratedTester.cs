@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using StoryTeller.Domain;
 using StoryTeller.Model;
 using StoryTeller.UserInterface;
 using StoryTeller.UserInterface.Examples;
@@ -17,8 +21,8 @@ namespace StoryTeller.Testing.UserInterface.Examples
             var fixture1 = new FixtureGraph("fixture1");
             var fixture2 = new FixtureGraph("fixture2");
 
-            var screen1 = new FixtureNodePresenter(null, fixture1, new UsageService());
-            var screen2 = new FixtureNodePresenter(null, fixture2, new UsageService());
+            var screen1 = new FixtureNodePresenter(new StubFixtureNodeView(), fixture1, new UsageService());
+            var screen2 = new FixtureNodePresenter(new StubFixtureNodeView(), fixture2, new UsageService());
 
             var subject = new FixtureNodeSubject(fixture1);
 
@@ -30,6 +34,33 @@ namespace StoryTeller.Testing.UserInterface.Examples
         }
     }
 
+    public class StubFixtureNodeView : IFixtureNodeView
+    {
+        public IFixtureNode Usage { get; set; }
+
+        public IEnumerable<Test> Tests { get; set; }
+
+        public void ShowUsage(IFixtureNode usage)
+        {
+            Usage = usage;
+        }
+
+        public void ShowTests(IEnumerable<Test> tests)
+        {
+            Tests = tests;
+        }
+
+        public void FireRefreshRequest()
+        {
+            if (RefreshRequested != null)
+            {
+                RefreshRequested(this, EventArgs.Empty);
+            }
+        }
+
+        public event EventHandler RefreshRequested;
+    }
+
     [TestFixture]
     public class when_creating_the_screen
     {
@@ -38,19 +69,26 @@ namespace StoryTeller.Testing.UserInterface.Examples
         [SetUp]
         public void SetUp()
         {
+            ProjectContext context = new ProjectContext();
+            context.Hierarchy = DataMother.GrammarProject().LoadTests();
+            context.Library = DataMother.GrammarsProjectRunner().GetLibary();
+            UsageService service = new UsageService(context);
+
             container = new Container(x =>
             {
-                x.For<IFixtureNodeView>().Use<FixtureNodeView>();
+                x.For<IFixtureNodeView>().Use<StubFixtureNodeView>();
                 x.For<IScreen<IFixtureNode>>().Use<FixtureNodePresenter>();
+                x.For<UsageService>().Use(service);
             });
 
             factory = new ScreenFactory(container);
 
-            fixture = new FixtureGraph("fixture1");
+            fixture = context.Library.FixtureFor("Composite");
 
             subject = new FixtureNodeSubject(fixture);
 
             thePresenter = subject.CreateScreen(factory).ShouldBeOfType<FixtureNodePresenter>();
+            thePresenter.Activate(null);
         }
 
         #endregion
@@ -71,6 +109,19 @@ namespace StoryTeller.Testing.UserInterface.Examples
         public void the_presenter_has_the_fixture_name_as_the_title()
         {
             thePresenter.Title.ShouldBeTheSameAs(fixture.Name);
+        }
+
+        [Test]
+        public void the_view_is_showing_the_subject()
+        {
+            ((StubFixtureNodeView) thePresenter.View).Usage.ShouldBeTheSameAs(subject.Subject);
+        }
+
+        [Test]
+        public void the_view_is_showing_the_tests_where_subject_is_used()
+        {
+            IEnumerable<Test> tests = ((StubFixtureNodeView) thePresenter.View).Tests;
+            tests.Select(x => x.Name).ShouldHaveTheSameElementsAs("Composite with Errors", "Simple Composite");
         }
     }
 }
