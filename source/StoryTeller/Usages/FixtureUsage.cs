@@ -69,5 +69,15 @@ namespace StoryTeller.Usages
         {
             return _tests.Any(x => x.IsInWorkspace(workspaceName));
         }
+
+        public IEnumerable<Test> TestsForFixture()
+        {
+            return _tests;
+        }
+
+        public IEnumerable<Test> TestsForGrammar(string grammarKey)
+        {
+            return from usage in _grammars where usage.Key == grammarKey select usage.Test;
+        }
     }
 }

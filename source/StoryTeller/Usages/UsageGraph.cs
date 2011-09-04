@@ -53,12 +53,14 @@ namespace StoryTeller.Usages
 
         public IEnumerable<Test> TestsFor(string fixtureName)
         {
-            throw new NotImplementedException();
+            FixtureUsage fixtureUsage = ForFixture(fixtureName);
+            return fixtureUsage.TestsForFixture();
         }
 
         public IEnumerable<Test> TestsFor(string fixtureName, string grammarKey)
         {
-            throw new NotImplementedException();
+            FixtureUsage fixtureUsage = ForFixture(fixtureName);
+            return fixtureUsage.TestsForGrammar(grammarKey);
         }
 
         void ITestStream.Tags(Tags tags)
