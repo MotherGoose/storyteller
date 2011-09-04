@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using StoryTeller.Domain;
+using StoryTeller.Usages;
 
 namespace StoryTeller.Model
 {
@@ -22,7 +23,7 @@ namespace StoryTeller.Model
     }
 
     [Serializable]
-    public abstract class GrammarStructure : IFixtureNode
+    public abstract class GrammarStructure : IFixtureNode, ITraceableUse
     {
         private readonly List<GrammarError> _errors = new List<GrammarError>();
         private string _name;
@@ -100,6 +101,11 @@ namespace StoryTeller.Model
         public virtual IStep CreateNewStep()
         {
             return CreateExample();
+        }
+
+        public IEnumerable<Test> FindUsages(UsageGraph graph)
+        {
+            return graph.TestsFor(Parent.Name, _name);
         }
     }
 }

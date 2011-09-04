@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FubuCore;
 using StoryTeller.Domain;
+using StoryTeller.Usages;
 
 namespace StoryTeller.Model
 {
@@ -30,5 +31,10 @@ namespace StoryTeller.Model
         void ModifyExampleTest(Test example);
 
         IEnumerable<GrammarError> AllErrors();
+    }
+
+    public interface ITraceableUse
+    {
+        IEnumerable<Test> FindUsages(UsageGraph graph);
     }
 }

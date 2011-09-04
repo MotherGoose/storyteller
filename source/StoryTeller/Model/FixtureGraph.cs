@@ -5,6 +5,7 @@ using FubuCore;
 using FubuCore.Util;
 using StoryTeller.Domain;
 using StoryTeller.Engine.Constraints;
+using StoryTeller.Usages;
 using StructureMap;
 
 namespace StoryTeller.Model
@@ -34,7 +35,7 @@ namespace StoryTeller.Model
     }
 
     [Serializable]
-    public class FixtureGraph : IFixtureNode, IFixtureGraph
+    public class FixtureGraph : IFixtureNode, IFixtureGraph, ITraceableUse
     {
         private readonly List<GrammarError> _errors = new List<GrammarError>();
         private readonly string _name;
@@ -175,8 +176,8 @@ namespace StoryTeller.Model
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (FixtureGraph)) return false;
-            return Equals((FixtureGraph) obj);
+            if (obj.GetType() != typeof(FixtureGraph)) return false;
+            return Equals((FixtureGraph)obj);
         }
 
         public override int GetHashCode()
@@ -221,6 +222,12 @@ namespace StoryTeller.Model
         public bool HasGrammarErrors()
         {
             return _structures.GetAll().Any(x => x.AllErrors().Any());
+        }
+
+
+        public IEnumerable<Test> FindUsages(UsageGraph graph)
+        {
+            return graph.TestsFor(_name);
         }
     }
 }

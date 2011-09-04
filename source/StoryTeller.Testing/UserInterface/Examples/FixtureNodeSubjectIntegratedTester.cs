@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using StoryTeller.Model;
+using StoryTeller.UserInterface;
 using StoryTeller.UserInterface.Examples;
 using StoryTeller.UserInterface.Screens;
 using StructureMap;
@@ -16,8 +17,8 @@ namespace StoryTeller.Testing.UserInterface.Examples
             var fixture1 = new FixtureGraph("fixture1");
             var fixture2 = new FixtureGraph("fixture2");
 
-            var screen1 = new FixtureNodePresenter(null, fixture1);
-            var screen2 = new FixtureNodePresenter(null, fixture2);
+            var screen1 = new FixtureNodePresenter(null, fixture1, new UsageService());
+            var screen2 = new FixtureNodePresenter(null, fixture2, new UsageService());
 
             var subject = new FixtureNodeSubject(fixture1);
 
@@ -64,6 +65,12 @@ namespace StoryTeller.Testing.UserInterface.Examples
         public void the_presenter_has_the_fixture_as_the_subject()
         {
             thePresenter.Subject.ShouldBeTheSameAs(fixture);
+        }
+
+        [Test]
+        public void the_presenter_has_the_fixture_name_as_the_title()
+        {
+            thePresenter.Title.ShouldBeTheSameAs(fixture.Name);
         }
     }
 }

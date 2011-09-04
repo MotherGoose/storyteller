@@ -131,6 +131,8 @@ namespace StoryTeller.UserInterface
             makeSingleton<ProjectContext>();
 
             makeSingleton<WorkspaceSelector>();
+
+            makeSingleton<UsageService>();
         }
 
         private void fakeValidDefaultsForExplicitArguments()
