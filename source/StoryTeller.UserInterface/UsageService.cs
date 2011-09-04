@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using StoryTeller.Domain;
@@ -9,6 +10,7 @@ using StoryTeller.Workspace;
 namespace StoryTeller.UserInterface
 {
     public class UsageService : IListener<ProjectLoaded>
+                                        , IListener<ReloadTestsMessage>
     {
         private ProjectContext _context;
         private UsageGraph _usages;
@@ -26,6 +28,16 @@ namespace StoryTeller.UserInterface
         }
 
         public void Handle(ProjectLoaded message)
+        {
+            AsyncRebuild();
+        }
+
+        public void RebuildUsages()
+        {
+            Rebuild();
+        }
+
+        private void AsyncRebuild()
         {
             Task.Factory.StartNew(Rebuild);
         }
@@ -53,5 +65,11 @@ namespace StoryTeller.UserInterface
                 return fixtureNode.FindUsages(_usages);
             }
         }
+        
+        public void Handle(ReloadTestsMessage message)
+        {
+            AsyncRebuild();
+        }
+
     }
 }

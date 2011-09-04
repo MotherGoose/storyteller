@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using StoryTeller.Domain;
 using StoryTeller.Execution;
@@ -9,5 +10,7 @@ namespace StoryTeller.UserInterface.Examples
     {
         void ShowUsage(IFixtureNode usage);
         void ShowTests(IEnumerable<Test> tests);
+
+        event EventHandler RefreshRequested;
     }
 }

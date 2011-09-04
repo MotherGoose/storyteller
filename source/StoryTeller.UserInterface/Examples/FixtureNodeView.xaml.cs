@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,9 +15,21 @@ namespace StoryTeller.UserInterface.Examples
     /// </summary>
     public partial class FixtureNodeView : UserControl, IFixtureNodeView
     {
+        public event EventHandler RefreshRequested;
+
         public FixtureNodeView()
         {
             InitializeComponent();
+
+            refresh.Click += (x, y) => Refresh();
+        }
+
+        private void Refresh()
+        {
+            if (RefreshRequested != null)
+            {
+                RefreshRequested(this, EventArgs.Empty);
+            }
         }
 
         public void ShowUsage(IFixtureNode usage)

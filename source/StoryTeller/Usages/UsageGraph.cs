@@ -32,13 +32,15 @@ namespace StoryTeller.Usages
 
             _listener.Start(tests.Count());
 
-            tests.Each(x =>
-            {
-                _listener.ReadingTest(x.LocatorPath());
+            tests.Each(ParseTest);
+        }
 
-                var parser = new TestParser(x, this, _library);
-                parser.Parse();
-            });
+        private void ParseTest(Test x)
+        {
+            _listener.ReadingTest(x.LocatorPath());
+
+            var parser = new TestParser(x, this, _library);
+            parser.Parse();
         }
 
         public FixtureUsage ForFixture(string name)
@@ -164,5 +166,6 @@ namespace StoryTeller.Usages
         {
             return _fixtures.GetAll().Select(x => x.Fixture);
         }
+        
     }
 }

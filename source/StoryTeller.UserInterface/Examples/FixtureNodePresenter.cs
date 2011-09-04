@@ -17,8 +17,15 @@ namespace StoryTeller.UserInterface.Examples
         public FixtureNodePresenter(IFixtureNodeView view, IFixtureNode subject, UsageService usageService)
         {
             _view = view;
+            _view.RefreshRequested += ViewRefreshRequested;
             _subject = subject;
             _usageService = usageService;
+        }
+
+        void ViewRefreshRequested(object sender, System.EventArgs e)
+        {
+            _usageService.RebuildUsages();
+            UpdateView();
         }
         
         public void Handle(BinaryRecycleFinished message)
@@ -33,6 +40,11 @@ namespace StoryTeller.UserInterface.Examples
         public string Title { get { return _subject.Name; } }
 
         public void Activate(IScreenObjectRegistry screenObjects)
+        {
+            UpdateView();
+        }
+
+        private void UpdateView()
         {
             _view.ShowUsage(_subject);
             _view.ShowTests(_usageService.FindUsages(_subject as ITraceableUse));
