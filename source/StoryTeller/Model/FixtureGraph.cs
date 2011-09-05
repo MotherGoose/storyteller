@@ -35,7 +35,7 @@ namespace StoryTeller.Model
     }
 
     [Serializable]
-    public class FixtureGraph : IFixtureNode, IFixtureGraph, ITraceableUse
+    public class FixtureGraph : IFixtureNode, IFixtureGraph
     {
         private readonly List<GrammarError> _errors = new List<GrammarError>();
         private readonly string _name;

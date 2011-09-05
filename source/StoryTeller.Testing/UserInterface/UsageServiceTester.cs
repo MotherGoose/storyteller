@@ -54,5 +54,6 @@ namespace StoryTeller.Testing.UserInterface
                 _service.FindUsages(_context.Library.FixtureFor("DecoratedGrammar").GrammarFor("Go"));
             Assert.AreEqual(0, tests.Count());
         }
+        
     }
 }

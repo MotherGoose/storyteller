@@ -32,9 +32,10 @@ namespace StoryTeller.UserInterface.Examples
             }
         }
 
-        public void ShowUsage(IFixtureNode usage)
+        public void ShowUsageDescription(string usageCaption, string usageDescription)
         {
-            description.Content = usage.Label;
+            caption.Content = usageCaption;
+            description.Content = usageDescription;
         }
 
         public void ShowTests(IEnumerable<Test> tests)

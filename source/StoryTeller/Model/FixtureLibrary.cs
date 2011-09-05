@@ -4,6 +4,7 @@ using System.Linq;
 using FubuCore.Util;
 using StoryTeller.Domain;
 using StoryTeller.Engine;
+using StoryTeller.Usages;
 
 namespace StoryTeller.Model
 {
@@ -165,6 +166,16 @@ namespace StoryTeller.Model
             });
 
             return fixture;
+        }
+
+        public IEnumerable<Test> FindUsages(UsageGraph graph)
+        {
+            List<Test> tests = new List<Test>();
+            foreach(FixtureGraph fixture in _fixtures)
+            {
+                tests.AddRange(fixture.FindUsages(graph));
+            }
+            return tests;
         }
     }
 }

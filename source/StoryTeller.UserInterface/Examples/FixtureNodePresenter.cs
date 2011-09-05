@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using StoryTeller.Domain;
+using System;
 using StoryTeller.Execution;
 using StoryTeller.Model;
-using StoryTeller.Usages;
 using StoryTeller.UserInterface.Actions;
 using StoryTeller.UserInterface.Screens;
 
@@ -11,8 +9,8 @@ namespace StoryTeller.UserInterface.Examples
     public class FixtureNodePresenter : IScreen<IFixtureNode>, IListener<BinaryRecycleFinished>
     {
         private readonly IFixtureNode _subject;
+        private readonly UsageService _usageService;
         private readonly IFixtureNodeView _view;
-        private UsageService _usageService;
 
         public FixtureNodePresenter(IFixtureNodeView view, IFixtureNode subject, UsageService usageService)
         {
@@ -22,32 +20,29 @@ namespace StoryTeller.UserInterface.Examples
             _usageService = usageService;
         }
 
-        void ViewRefreshRequested(object sender, System.EventArgs e)
-        {
-            _usageService.RebuildUsages();
-            UpdateView();
-        }
-        
         public void Handle(BinaryRecycleFinished message)
         {
         }
 
 
-        public IFixtureNode Subject { get { return _subject; } }
+        public IFixtureNode Subject
+        {
+            get { return _subject; }
+        }
 
-        public object View { get { return _view; } }
+        public object View
+        {
+            get { return _view; }
+        }
 
-        public string Title { get { return _subject.Name; } }
+        public string Title
+        {
+            get { return _subject.Name; }
+        }
 
         public void Activate(IScreenObjectRegistry screenObjects)
         {
             UpdateView();
-        }
-
-        private void UpdateView()
-        {
-            _view.ShowUsage(_subject);
-            _view.ShowTests(_usageService.FindUsages(_subject as ITraceableUse));
         }
 
         public bool CanClose()
@@ -58,6 +53,20 @@ namespace StoryTeller.UserInterface.Examples
         public void Dispose()
         {
         }
-        
+
+        private void ViewRefreshRequested(object sender, EventArgs e)
+        {
+            _usageService.RebuildUsages();
+            UpdateView();
+        }
+
+        private void UpdateView()
+        {
+            string caption = string.Format("Tests using {0}:", _subject.GetType().Name);
+            string description = _subject.Label;
+
+            _view.ShowUsageDescription(caption, description);
+            _view.ShowTests(_usageService.FindUsages(_subject));
+        }
     }
 }

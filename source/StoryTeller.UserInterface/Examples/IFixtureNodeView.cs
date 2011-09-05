@@ -8,7 +8,7 @@ namespace StoryTeller.UserInterface.Examples
 {
     public interface IFixtureNodeView
     {
-        void ShowUsage(IFixtureNode usage);
+        void ShowUsageDescription(string usageCaption, string usageDescription);
         void ShowTests(IEnumerable<Test> tests);
 
         event EventHandler RefreshRequested;

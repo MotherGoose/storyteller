@@ -23,7 +23,7 @@ namespace StoryTeller.Model
     }
 
     [Serializable]
-    public abstract class GrammarStructure : IFixtureNode, ITraceableUse
+    public abstract class GrammarStructure : IFixtureNode
     {
         private readonly List<GrammarError> _errors = new List<GrammarError>();
         private string _name;

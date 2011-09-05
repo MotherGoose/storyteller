@@ -31,10 +31,8 @@ namespace StoryTeller.Model
         void ModifyExampleTest(Test example);
 
         IEnumerable<GrammarError> AllErrors();
-    }
 
-    public interface ITraceableUse
-    {
         IEnumerable<Test> FindUsages(UsageGraph graph);
     }
+
 }

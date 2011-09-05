@@ -50,7 +50,7 @@ namespace StoryTeller.UserInterface
             }
         }
 
-        public IEnumerable<Test> FindUsages(ITraceableUse fixtureNode)
+        public IEnumerable<Test> FindUsages(IFixtureNode fixtureNode)
         {
             if (fixtureNode == null)
             {

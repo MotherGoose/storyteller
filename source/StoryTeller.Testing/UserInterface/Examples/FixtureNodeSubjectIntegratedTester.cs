@@ -36,13 +36,16 @@ namespace StoryTeller.Testing.UserInterface.Examples
 
     public class StubFixtureNodeView : IFixtureNodeView
     {
-        public IFixtureNode Usage { get; set; }
+        public string Description { get; set; }
+
+        public string Caption { get; set; }
 
         public IEnumerable<Test> Tests { get; set; }
 
-        public void ShowUsage(IFixtureNode usage)
+        public void ShowUsageDescription(string usageCaption, string usageDescription)
         {
-            Usage = usage;
+            Description = usageDescription;
+            Caption = usageCaption;
         }
 
         public void ShowTests(IEnumerable<Test> tests)
@@ -114,7 +117,7 @@ namespace StoryTeller.Testing.UserInterface.Examples
         [Test]
         public void the_view_is_showing_the_subject()
         {
-            ((StubFixtureNodeView) thePresenter.View).Usage.ShouldBeTheSameAs(subject.Subject);
+            ((StubFixtureNodeView) thePresenter.View).Description.ShouldBeTheSameAs(subject.Subject.Label);
         }
 
         [Test]
