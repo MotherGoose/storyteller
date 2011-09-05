@@ -67,7 +67,7 @@ namespace StoryTeller.UserInterface.Examples
             List<Test> tests = new List<Test>(_usageService.FindUsages(_subject));
             tests.Sort(new TestSorter());
 
-            string caption = string.Format("{0} tests using {1}:", tests.Count, _subject.GetType().Name);
+            string caption = string.Format("{0} test(s) using {1}:", tests.Count, _subject.GetType().Name);
             string description = _subject.Label;
 
             _view.ShowUsageDescription(caption, description);

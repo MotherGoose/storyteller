@@ -48,7 +48,7 @@ namespace StoryTeller.Testing.UserInterface.Examples
             Caption = usageCaption;
         }
 
-        public void ShowTests(IEnumerable<Test> tests)
+        public void ShowTests(IEnumerable<Test> tests, Func<Test, string> linkText)
         {
             Tests = tests;
         }
@@ -121,10 +121,16 @@ namespace StoryTeller.Testing.UserInterface.Examples
         }
 
         [Test]
-        public void the_view_is_showing_the_tests_where_subject_is_used()
+        public void the_view_is_showing_the_tests_where_subject_is_used_in_alphabetical_order()
         {
             IEnumerable<Test> tests = ((StubFixtureNodeView) thePresenter.View).Tests;
             tests.Select(x => x.Name).ShouldHaveTheSameElementsAs("Composite with Errors", "Simple Composite");
+        }
+        
+        [Test]
+        public void the_view_is_showing_the_number_of_tests_where_subject_is_used()
+        {
+            ((StubFixtureNodeView)thePresenter.View).Caption.StartsWith("2 tests");
         }
     }
 }
