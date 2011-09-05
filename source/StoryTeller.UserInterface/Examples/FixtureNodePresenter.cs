@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using StoryTeller.Domain;
 using StoryTeller.Execution;
 using StoryTeller.Model;
 using StoryTeller.UserInterface.Actions;
@@ -62,11 +64,29 @@ namespace StoryTeller.UserInterface.Examples
 
         private void UpdateView()
         {
-            string caption = string.Format("Tests using {0}:", _subject.GetType().Name);
+            List<Test> tests = new List<Test>(_usageService.FindUsages(_subject));
+            tests.Sort(new TestSorter());
+
+            string caption = string.Format("{0} tests using {1}:", tests.Count, _subject.GetType().Name);
             string description = _subject.Label;
 
             _view.ShowUsageDescription(caption, description);
-            _view.ShowTests(_usageService.FindUsages(_subject));
+
+            _view.ShowTests(tests, GetLinkText);
+        }
+
+        private static string GetLinkText(Test test)
+        {
+            return test.LocatorPath().Replace(@"/", " / ");
         }
     }
+
+    internal class TestSorter : IComparer<Test>
+    {
+        public int Compare(Test x, Test y)
+        {
+            return x.LocatorPath().CompareTo(y.LocatorPath());
+        }
+    }
+
 }

@@ -38,18 +38,17 @@ namespace StoryTeller.UserInterface.Examples
             description.Content = usageDescription;
         }
 
-        public void ShowTests(IEnumerable<Test> tests)
+        public void ShowTests(IEnumerable<Test> tests, Func<Test, string> linkText)
         {
             Tests.Children.Clear();
             tests.Each(x =>
             {
                 var link = new Link
                 {
-                    ToolTip = "{0} ({1})".ToFormat(x.Name, x.ToString()),
                     Padding = new Thickness(0, 0, 0, 5)
                 };
 
-                link.WireUp(x.Name, () => new OpenItemMessage(x));
+                link.WireUp(linkText(x), () => new OpenItemMessage(x));
                 Tests.Children.Add(link);
             });
             
